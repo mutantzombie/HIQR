@@ -7,8 +7,8 @@
 <meta name="description" content="Annotated concepts and examples for HTML injection (cross-site scripting) tests">
 <meta name="generator" content="vi. Seriously.">
 <title>HTML Injection Quick Reference</title>
-<script src="http://use.edgefonts.net/open-sans.js"></script>
-<script src="http://use.edgefonts.net/source-code-pro.js"></script>
+<script src="https://use.edgefonts.net/open-sans.js"></script>
+<script src="https://use.edgefonts.net/source-code-pro.js"></script>
 <style>
 body {
   font-family: open-sans, sans-serif;
@@ -57,7 +57,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 
 -->
 <h1>HTML Injection Quick Reference (HIQR)</h1>
-<div style="float:left">Mike Shema, <a href="http://deadliestwebattacks.com/">Deadliest Web Attacks</a></div>
+<div style="float:left">Mike Shema, <a href="https://deadliestwebattacks.com/">Deadliest Web Attacks</a></div>
 <div style="float:right">Repository: [ <a href="https://github.com/mutantzombie/HIQR">HIQR @ GitHub</a> ]</div>
 <div id="hiqr_toc" style="clear:both">
 <br>
@@ -287,7 +287,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 <tr>
   <td id="data_uri" colspan="3" class="footnote"><sup>2</sup> The basic format is <span class="placeholder">dataurl := "data:" [ mediatype ] [ ";base64" ] "," data</span>. The scheme is defined in <a href="http://tools.ietf.org/html/rfc2397">RFC 2397</a>.
 <tr>
-  <td id="html5_attribute_name_state" colspan="3" class="footnote"><sup>3</sup> Per <a href="http://dev.w3.org/html5/spec/single-page.html#attribute-name-state">HTML5 spec</a>, <cite>"When the user agent leaves the attribute name state (and before emitting the tag token, if appropriate), the complete attribute's name must be compared to the other attributes on the same token; if there is already an attribute on the token with the exact same name, then this is a parse error and the new attribute must be dropped, along with the value that gets associated with it (if any)."</cite>
+  <td id="html5_attribute_name_state" colspan="3" class="footnote"><sup>3</sup> Per <a href="https://dev.w3.org/html5/spec/single-page.html#attribute-name-state">HTML5 spec</a>, <cite>"When the user agent leaves the attribute name state (and before emitting the tag token, if appropriate), the complete attribute's name must be compared to the other attributes on the same token; if there is already an attribute on the token with the exact same name, then this is a parse error and the new attribute must be dropped, along with the value that gets associated with it (if any)."</cite>
 </table>
 <div align="right"><a href="#hiqr_toc">top</a></div>
 <br>
@@ -329,7 +329,7 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
   <td class="example">window[<span class="payload">/alert/.source</span>](9)
 <tr>
   <td rowspan="12">Harness functions from a JavaScript library
-  <td rowspan="2"><a href="http://angularjs.org/">Angular</a>
+  <td rowspan="2"><a href="https://angularjs.org/">Angular</a>
   <td class="example">angular.bind(self, alert, 9)()
   <tr>
   <td class="example">angular.element.apply(alert(9))
@@ -390,6 +390,6 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 </table>
 <div align="right"><a href="#hiqr_toc">top</a></div>
 <br>
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">HIQR</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://deadliestwebattacks.com/" property="cc:attributionName" rel="cc:attributionURL">Mike Shema</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License</a>.
+<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">HIQR</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://deadliestwebattacks.com/" property="cc:attributionName" rel="cc:attributionURL">Mike Shema</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License</a>.
 </body>
 </html>
