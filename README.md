@@ -7,4 +7,4 @@ Mike Shema, https://deadliestwebattacks.com
 
 [Project page](https://mutantzombie.github.io/HIQR/hiqr.html)
 
-This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/3.0/.
+HTML Injection Quick Reference © 2012 by Mike Shema is licensed under CC BY 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/
