@@ -3,7 +3,7 @@ HIQR
 
 HTML Injection Quick Reference
 
-Mike Shema, https://deadliestwebattacks.com
+Mike Shema, [@Codexatron](https://twitter.com/Codexatron)
 
 [Project page](https://mutantzombie.github.io/HIQR/hiqr.html)
 
